@@ -82,7 +82,7 @@ wallet_password="your_wallet_password"
 ## Add a PDF
 
 Place the PDF file you want to ingest in the root directory and ensure the `PDF_PATH` variable in the scripts matches its filename (e.g., `human-nutrition-text.pdf`).
-Yyou can download file using https://www.google.com/search?q=http://pressbooks.oer.hawaii.edu/humannutrition/open/download%3Ftype%3Dpdf
+You can download file using https://www.google.com/search?q=http://pressbooks.oer.hawaii.edu/humannutrition/open/download%3Ftype%3Dpdf
 
 ---
 
