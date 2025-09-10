@@ -76,7 +76,7 @@ wallet_password="your_wallet_password"
 ---
 
 ## Database Table Setup
-
+Use SQL_for_ORACLE_DB.txt to connect and create objects
 
 
 ## Add a PDF
