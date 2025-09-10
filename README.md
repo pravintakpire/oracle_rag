@@ -33,8 +33,8 @@ The repository provides examples for connecting to both local/on-premise Oracle 
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
-cd <your-repository-name>
+git clone https://github.com/pravintakpire/oracle_rag
+cd oracle_rag
 ```
 
 ### 2. Create a Virtual Environment
