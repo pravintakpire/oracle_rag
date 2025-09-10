@@ -1,0 +1,70 @@
+##############################################################################################################
+**Step to create table in Oracle Database for storing and searching document chunks with embeddings**
+**This we would be using with OpenAI Emebedding API example**
+##############################################################################################################
+1.) Please note the we need to modify the VECTOR_MEMORY_SIZE initialization parameter to at least 200M
+It's possible to set vector_memory_size in Oracle Database 23ai Free, however there are couple of things worth pointing out:
+    In Oracle Database 23ai Free SGA + PGA combined cannot exceed 2GB 
+    # Connect to your docker container name ora23ai
+    docker exec -it ora23ai bash
+    # Connect to sqlplus as sysdba
+    sqlplus / as sysdba  
+    #Allocate 200MB to the vector memory area: 
+    alter system set vector_memory_size = 200M scope=spfile
+    Bounce the instance : shutdown immediate followed by a startup
+    Check the value of vector_memory_size
+
+2.) Connect to your pluggable database as a user with the necessary privileges to create users and tables. 
+-- name of my pluggable database is FREEPDB1 
+-- CREATE USER + grants
+CREATE USER rag IDENTIFIED BY "xxxxxxxx" QUOTA UNLIMITED ON USERS;
+GRANT CREATE SESSION, CREATE TABLE, CREATE SEQUENCE, CREATE VIEW, CREATE PROCEDURE TO rag;
+
+-- App objects: store text, json-ish metadata, and the embedding
+ALTER SESSION SET NLS_LENGTH_SEMANTICS=CHAR;
+
+-- Use a fixed dimension & format that matches your embedder (edit dim!)
+-- e.g., 384 for all-MiniLM; 768 for some HF models; 1536 for OpenAI text-embedding-3-small;
+-- 3072 for text-embedding-3-large. We'll default to 768 below as an example.
+-- Create the table to store the document chunks and embeddings
+CREATE TABLE chunks (
+    doc_id VARCHAR2(100),
+    chunk_index NUMBER,
+    content CLOB,
+    metadata JSON,
+    embedding VECTOR(1536, FLOAT32),
+    CONSTRAINT pk_chunks PRIMARY KEY (doc_id, chunk_index)
+);
+
+##############################################################################################################
+**Step to create table in Oracle Database for storing and searching document chunks with embeddings**
+**This we would be using with Ollama and Embedding Model bge-m3**
+##############################################################################################################
+As we would be using the same database running on Docker Container we are not running Vector Memory change and 
+user creation commands again 
+
+CREATE TABLE chunks_bge (
+    doc_id VARCHAR2(100),
+    chunk_index NUMBER,
+    content CLOB,
+    metadata JSON,
+    embedding VECTOR(1536, FLOAT32),
+    CONSTRAINT pk_chunks PRIMARY KEY (doc_id, chunk_index)
+);
+
+##############################################################################################################
+**Step to create table in Oracle Autonomous Database on ORacle Cloud Infrastucre for storing and retrieval**
+**This we would be using with OpenAI Embedding Model**
+##############################################################################################################
+There is no need to set the Vector Memory Size parameter for OCI ADB.
+Login to OCI Console, go to your Oracle ADB and use console to create user and grant required privileges. 
+Connect to OCI ADB as user created and create the below table
+
+CREATE TABLE chunks_bge (
+    doc_id VARCHAR2(100),
+    chunk_index NUMBER,
+    content CLOB,
+    metadata JSON,
+    embedding VECTOR(1536, FLOAT32),
+    CONSTRAINT pk_chunks PRIMARY KEY (doc_id, chunk_index)
+);
